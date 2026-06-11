@@ -114,7 +114,7 @@ async def get_messages(session_id: int):
 
 
 def main():
-    uvicorn.run(agent_app, host="0.0.0.0", port=8000)
+    uvicorn.run(agent_app, host="0.0.0.0", port=int(os.environ.get("PORT", 8000)))
 
 
 if __name__ == "__main__":
