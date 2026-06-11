@@ -3,6 +3,8 @@ import os
 
 import fastapi
 import uvicorn
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from sse_starlette.sse import EventSourceResponse
 from llama_index.core.agent.workflow import AgentOutput, AgentStream, ReActAgent
 from llama_index.core.tools import FunctionTool
@@ -48,6 +50,12 @@ sessions: dict[int, Context] = {}
 
 
 agent_app = fastapi.FastAPI()
+agent_app.mount("/static", StaticFiles(directory="static"), name="static")
+
+
+@agent_app.get("/")
+async def root():
+    return FileResponse("static/index.html")
 
 # CHANGED: Swapped OpenAI with Groq using a fast tool-use model like llama3-70b
 llm = Groq(model="llama-3.3-70b-versatile")
